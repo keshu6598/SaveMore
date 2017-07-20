@@ -1,4 +1,4 @@
-package inc.developer.vivonk.savemore;
+package inc.developer.vivonk;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -19,6 +19,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.util.Locale;
+
+import inc.developer.vivonk.MainActivity;
+import inc.developer.vivonk.savemore.R;
 
 /**
  * Created by vivonk on 19-07-2017.
@@ -46,7 +49,7 @@ public class NotificationService extends Service {
 //        C:\Users\Vivo Nk\Documents\GitHub\SaveMore2\app\src\main\java\inc\developer\vivonk\savemore
         editor.apply();
         Log.e("TAG", "onCreate: <<<<<<<<<<<<<<<<<<< before notification");
-        Intent resultIntent = new Intent(this, MainActivity.class);
+        Intent resultIntent = new Intent(this, Main2Activity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 // Adds the back stack
