@@ -16,7 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".NotificationService"/>
+
+        <service android:name=".NotificationService" />
+
+        <activity android:name=".Main2Activity" android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>
