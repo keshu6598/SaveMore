@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         mService = sharedPreferences.getBoolean("service", false);
+        this.startService(new Intent(this, ClipBoardService.class));
         this.startService(new Intent(this, NotificationService.class));
+
     }
 }

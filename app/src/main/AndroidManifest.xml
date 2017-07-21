@@ -18,7 +18,7 @@
         </activity>
 
         <service android:name="inc.developer.vivonk.NotificationService" />
-
+        <service android:name="inc.developer.vivonk.ClipBoardService" />
         <activity android:name="inc.developer.vivonk.Main2Activity" android:theme="@style/Theme.AppCompat.Light.Dialog"/>
     </application>
 
