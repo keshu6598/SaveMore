@@ -19,7 +19,11 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView">
+        android:id="@+id/listView"
+        android:padding="5dp"
+        android:divider="@android:color/black"
+        android:dividerHeight="1dp"
+        android:layout_margin="10dp">
     </ListView>
 
 </android.support.constraint.ConstraintLayout>

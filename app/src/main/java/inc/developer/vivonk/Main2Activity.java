@@ -1,22 +1,43 @@
 package inc.developer.vivonk;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 import inc.developer.vivonk.savemore.R;
+
+import static android.content.ContentValues.TAG;
 
 public class Main2Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     int mCount;
     ListView listView;
     TextView tvDefault;
+    ArrayList<String> arrayList;
+    ClipboardManager clipBoardManager;
+    ClipData clipdata;
+    ArrayAdapter adapter;
+    String string;
+    int position;
+    private  AdapterView<?> mAdapterView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +49,92 @@ public class Main2Activity extends AppCompatActivity {
         if(mCount==0){
             tvDefault.setVisibility(View.VISIBLE);
         } else{
+            arrayList=new ArrayList<>();
             tvDefault.setVisibility(View.GONE);
+            Vector<String> vector=new Vector<>();
+            for(int i=mCount;i>0;i--){
+
+                String string = sharedPreferences.getString(Integer.toString(i), "");
+                Log.e(TAG, "performClipboardCheck: string "+i+" th is  --------->"+string);
+                if(!vector.contains(string)) {
+                    arrayList.add(string);
+                    vector.add(string);
+                }
+            }
+            adapter=new ArrayAdapter<>(Main2Activity.this,R.layout.texxview,R.id.textView,arrayList);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick( AdapterView<?> adapterView, View view, int i, long l) {
+                    position=i;
+                    mAdapterView=adapterView;
+                    string =adapterView.getItemAtPosition(i).toString();
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
+                    alertDialog.setTitle("Action")
+                            .setMessage("Choose Action")
+                            .setCancelable(true)
+                            .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Object toRemove = adapter.getItem(position);
+                                    adapter.remove(toRemove);
+                                    adapter.notifyDataSetChanged();
+                                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                                    for(int size=sharedPreferences.getInt("count",0);i>0;i--){
+                                        if(sharedPreferences.getString(Integer.toString(size),"null").contains(string)){
+                                            editor.remove(string);
+                                            mCount--;
+                                        }
+                                    }
+
+                                    editor.putInt("count",mCount);
+                                    editor.apply();
+                                }
+                            })
+                            .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    clipBoardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                                    clipdata=ClipData.newPlainText("clip",string);
+                                    clipBoardManager.setPrimaryClip(clipdata);
+                                    Toast.makeText(Main2Activity.this, " Copied ", Toast.LENGTH_SHORT).show();
+                                    Object toRemove = adapter.getItem(position);
+                                    adapter.remove(toRemove);
+                                    adapter.notifyDataSetChanged();
+                                    if(adapter.getCount()==0){
+                                        tvDefault.setVisibility(View.VISIBLE);
+                                    }
+                                    else {
+                                        arrayList.add(0, clipdata.getItemAt(0).getText().toString());
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                }
+                            }).create().show();
+                }
+            });
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    clipBoardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                    clipdata=ClipData.newPlainText("clip",adapterView.getItemAtPosition(i).toString());
+                    clipBoardManager.setPrimaryClip(clipdata);
+                    Toast.makeText(Main2Activity.this, " Copied ", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "onItemClick: item is at   "+i+" Item is looking  "+ adapterView.getItemAtPosition(i).toString());
+                    Object toRemove = adapter.getItem(i);
+                    adapter.remove(toRemove);
+                    adapter.notifyDataSetChanged();
+                    if(adapter.getCount()==0){
+                        tvDefault.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        arrayList.add(0, clipdata.getItemAt(0).getText().toString());
+                        adapter.notifyDataSetChanged();
+                    }
+                    return false;
+                }
+            });
         }
     }
 }

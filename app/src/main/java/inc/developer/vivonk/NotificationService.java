@@ -37,7 +37,6 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e("TAG", "onCreate: In Notification Service Service started from mainActivity");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -46,18 +45,9 @@ public class NotificationService extends Service {
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("service",true);
-//        C:\Users\Vivo Nk\Documents\GitHub\SaveMore2\app\src\main\java\inc\developer\vivonk\savemore
         editor.apply();
-        Log.e("TAG", "onCreate: <<<<<<<<<<<<<<<<<<< before notification");
         Intent resultIntent = new Intent(this, Main2Activity.class);
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        /*TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-// Adds the back stack
-        stackBuilder.addParentStack(MainActivity.class);
-// Adds the Intent to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-// Gets a PendingIntent containing the entire back stack
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);*/
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 1,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mNotification = new NotificationCompat.Builder(NotificationService.this);
@@ -73,8 +63,6 @@ public class NotificationService extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         notificationManager.notify(1, mNotification.build());
-//        StatusBarNotification[] statusBarNotification = notificationManager.getActiveNotifications();
-        Log.e("TAG", "onCreate: >>>>>>>>>>>>>>>>>>>>>>>> after notification");
         return START_STICKY;
     }
 
