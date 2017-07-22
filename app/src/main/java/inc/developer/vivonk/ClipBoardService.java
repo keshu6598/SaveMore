@@ -38,9 +38,11 @@ public class ClipBoardService extends Service  {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.e(TAG, "onStartCommand: service started again with some work" );
+        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         clipBoardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
         clipBoardManager.addPrimaryClipChangedListener(listener);
-        if(clipBoardManager.hasPrimaryClip()) {
+        if(clipBoardManager.hasPrimaryClip()&&!sharedPreferences.getBoolean("check",false)) {
 
             clipdata = clipBoardManager.getPrimaryClip();
             clipDescription = clipBoardManager.getPrimaryClipDescription();

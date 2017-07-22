@@ -8,13 +8,16 @@ import android.util.Log;
 import inc.developer.vivonk.savemore.R;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean mService=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        mService = sharedPreferences.getBoolean("service", false);
+        boolean check=sharedPreferences.getBoolean("check",false);
+        if(!check){
+            sharedPreferences.edit().putBoolean("check",true).apply();
+        }
         this.startService(new Intent(this, ClipBoardService.class));
         this.startService(new Intent(this, NotificationService.class));
 

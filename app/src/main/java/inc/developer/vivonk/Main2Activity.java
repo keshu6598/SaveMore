@@ -44,6 +44,7 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         sharedPreferences = getSharedPreferences("list", MODE_PRIVATE);
         mCount = sharedPreferences.getInt("count", 0);
+        Log.e(TAG, "onCreate: mCount is .............."+mCount);
         listView = (ListView) findViewById(R.id.listView);
         tvDefault=(TextView)findViewById(R.id.textView);
         if(mCount==0){
@@ -80,15 +81,19 @@ public class Main2Activity extends AppCompatActivity {
                                     adapter.remove(toRemove);
                                     adapter.notifyDataSetChanged();
                                     SharedPreferences.Editor editor=sharedPreferences.edit();
-                                    for(int size=sharedPreferences.getInt("count",0);i>0;i--){
+                                    for(int size=sharedPreferences.getInt("count",0);size>0;size--){
                                         if(sharedPreferences.getString(Integer.toString(size),"null").contains(string)){
-                                            editor.remove(string);
+                                            Log.e(TAG, "onClick: mcount is "+mCount+ " size  string is "+ size+"--------"+string );
+                                            editor.remove(Integer.toString(size));
                                             mCount--;
                                         }
                                     }
 
                                     editor.putInt("count",mCount);
                                     editor.apply();
+                                    if(adapter.getCount()==0){
+                                        tvDefault.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             })
                             .setNegativeButton("Copy", new DialogInterface.OnClickListener() {
@@ -102,12 +107,12 @@ public class Main2Activity extends AppCompatActivity {
                                     Object toRemove = adapter.getItem(position);
                                     adapter.remove(toRemove);
                                     adapter.notifyDataSetChanged();
-                                    if(adapter.getCount()==0){
-                                        tvDefault.setVisibility(View.VISIBLE);
-                                    }
-                                    else {
+
+
                                         arrayList.add(0, clipdata.getItemAt(0).getText().toString());
                                         adapter.notifyDataSetChanged();
+                                    if(adapter.getCount()==0){
+                                        tvDefault.setVisibility(View.VISIBLE);
                                     }
                                 }
                             }).create().show();
