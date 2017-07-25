@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="inc.developer.vivonk.savemore">
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name="inc.developer.vivonk.MainActivity">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name="inc.developer.vivonk.MainActivity" android:label="Records">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service android:name="inc.developer.vivonk.FloatBubbleService" />
         <service android:name="inc.developer.vivonk.NotificationService" />
         <service android:name="inc.developer.vivonk.ClipBoardService" />
-        <activity android:name="inc.developer.vivonk.Main2Activity" android:theme="@style/Theme.AppCompat.Light.Dialog"/>
+        <activity android:name="inc.developer.vivonk.Main2Activity" android:theme="@style/Theme.AppCompat.Light.Dialog" android:label="Clips"/>
     </application>
 
 </manifest>

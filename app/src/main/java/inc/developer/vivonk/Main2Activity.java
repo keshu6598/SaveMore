@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -37,16 +38,20 @@ public class Main2Activity extends AppCompatActivity {
     ArrayAdapter adapter;
     String string;
     int position;
-    private  AdapterView<?> mAdapterView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        /*Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);*/
+        setFinishOnTouchOutside(false);
         sharedPreferences = getSharedPreferences("list", MODE_PRIVATE);
         mCount = sharedPreferences.getInt("count", 0);
         Log.e(TAG, "onCreate: mCount is .............."+mCount);
         listView = (ListView) findViewById(R.id.listView);
         tvDefault=(TextView)findViewById(R.id.textView);
+        tvDefault.setVisibility(View.GONE);
         if(mCount==0){
             tvDefault.setVisibility(View.VISIBLE);
         } else{
@@ -54,10 +59,9 @@ public class Main2Activity extends AppCompatActivity {
             tvDefault.setVisibility(View.GONE);
             Vector<String> vector=new Vector<>();
             for(int i=mCount;i>0;i--){
-
                 String string = sharedPreferences.getString(Integer.toString(i), "");
                 Log.e(TAG, "performClipboardCheck: string "+i+" th is  --------->"+string);
-                if(!vector.contains(string)) {
+                if(!vector.contains(string)&&!string.isEmpty()) {
                     arrayList.add(string);
                     vector.add(string);
                 }
@@ -68,7 +72,6 @@ public class Main2Activity extends AppCompatActivity {
                 @Override
                 public void onItemClick( AdapterView<?> adapterView, View view, int i, long l) {
                     position=i;
-                    mAdapterView=adapterView;
                     string =adapterView.getItemAtPosition(i).toString();
                     AlertDialog.Builder alertDialog=new AlertDialog.Builder(Main2Activity.this);
                     alertDialog.setTitle("Action")
@@ -80,16 +83,14 @@ public class Main2Activity extends AppCompatActivity {
                                     Object toRemove = adapter.getItem(position);
                                     adapter.remove(toRemove);
                                     adapter.notifyDataSetChanged();
+                                    mCount = sharedPreferences.getInt("count", 0);
                                     SharedPreferences.Editor editor=sharedPreferences.edit();
                                     for(int size=sharedPreferences.getInt("count",0);size>0;size--){
                                         if(sharedPreferences.getString(Integer.toString(size),"null").contains(string)){
                                             Log.e(TAG, "onClick: mcount is "+mCount+ " size  string is "+ size+"--------"+string );
                                             editor.remove(Integer.toString(size));
-                                            mCount--;
                                         }
                                     }
-
-                                    editor.putInt("count",mCount);
                                     editor.apply();
                                     if(adapter.getCount()==0){
                                         tvDefault.setVisibility(View.VISIBLE);
@@ -141,5 +142,10 @@ public class Main2Activity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public void setFinishOnTouchOutside(boolean finish) {
+        super.setFinishOnTouchOutside(finish);
     }
 }

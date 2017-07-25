@@ -20,6 +20,6 @@ public class MainActivity extends AppCompatActivity {
         }
         this.startService(new Intent(this, ClipBoardService.class));
         this.startService(new Intent(this, NotificationService.class));
-
+        this.startService(new Intent(this,FloatBubbleService.class));
     }
 }

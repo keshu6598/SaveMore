@@ -53,7 +53,7 @@ public class NotificationService extends Service {
         mNotification.setOngoing(true);
         mNotification.setContentTitle("Notification");
 
-        mNotification.setSmallIcon(R.mipmap.ic_launcher);
+        mNotification.setSmallIcon(R.drawable.icon);
         mNotification.setContentText("Am I visible");
 
         mNotification.setContentIntent(resultPendingIntent);

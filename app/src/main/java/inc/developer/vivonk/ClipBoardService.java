@@ -42,7 +42,7 @@ public class ClipBoardService extends Service  {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         clipBoardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
         clipBoardManager.addPrimaryClipChangedListener(listener);
-        if(clipBoardManager.hasPrimaryClip()&&!sharedPreferences.getBoolean("check",false)) {
+        if(clipBoardManager.hasPrimaryClip()) {
 
             clipdata = clipBoardManager.getPrimaryClip();
             clipDescription = clipBoardManager.getPrimaryClipDescription();
@@ -83,12 +83,9 @@ public class ClipBoardService extends Service  {
 
        SharedPreferences.Editor editor = sharedPreferences.edit();
        count = sharedPreferences.getInt("count", 0);
-       if(!sharedPreferences.getString(Integer.toString(count),"").contains(clip)){
            count++;
            editor.putString(Integer.toString(count),clip);
            editor.putInt("count",count);
-       }
-
        editor.apply();
 
     }
